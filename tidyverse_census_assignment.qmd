@@ -89,7 +89,20 @@ Which county has the highest percentage of 5-17 year-olds who speak Spanish at h
 
 ```{r}
 
+totcountypop <- "B16007_002"
+verywellenglish <- "B16004_005"
 
+
+totpoptable <- get_acs(geography = "county", variables = totcountypop, state = "MD") %>%
+  rename("totpop517" = "estimate") %>% 
+  select(-variable)
+  
+spanishtable <- get_acs(geography = "county", variables = verywellenglish, state = "MD") %>%
+  rename("verywellenglish" = "estimate") %>% 
+  select(-variable)
+
+spanishfinaltable <- left_join(totpoptable, spanishtable, by=c("GEOID" = "GEOID", "NAME" = "NAME")) %>%
+  mutate(pct_517spanish = (verywellenglish / totpop517) * 100)
 
 
 
@@ -121,7 +134,11 @@ Join the ZCTA dataframe to the zip totals dataframe and calculate a per capita r
 
 ```{r}
 
+pennvariables <- load_variables(2019, "acs1", cache = TRUE)
 
+myvars <- c(tot_pop2019 <- "B01003_001", med_income <- "B19013_001")
+
+data2019 <- get_acs(geography = "zcta", variables = c(myvars), year = 2019, state = "PA", zcta = NULL, survey = "acs1", output = "wide", )
 
 
 
