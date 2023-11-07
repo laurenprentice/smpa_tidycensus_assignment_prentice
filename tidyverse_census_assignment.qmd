@@ -47,7 +47,7 @@ You'll also need to load the list of American Community Survey variables from th
 **Task** load the variables from the 2021 5-year ACS and save them to a dataframe
 
 ```{r}
-
+censusvariables <- load_variables(2021, "acs5", cache = TRUE)
 
 ```
 
@@ -58,7 +58,12 @@ You'll also need to load the list of American Community Survey variables from th
 ```{r}
 
 
+medianage <- "B01002_001"
 
+
+get_acs(geography = "county", 
+        variables = medianage,
+        state = "MD")
 
 
 
@@ -69,7 +74,8 @@ You'll also need to load the list of American Community Survey variables from th
 
 ```{r}
 
-
+get_acs(geography = "county", variables = medianage, state = "MD") %>% 
+  filter(estimate >= 50)
 
 
 ```
